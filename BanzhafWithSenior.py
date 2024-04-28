@@ -47,7 +47,7 @@ if __name__ == '__main__':
 	else:
 		print("vetoPowers:", vetoPowers)
 
-	powerIndexes = Banzhaf.findPowerDistribution(quota, weights, winningCoalitions)
+	powerIndexes = Banzhaf.findPowerDistribution(winningCoalitions)
 	print("powerIndexes:")
 	for i in range(len(powerIndexes)):
-		print(f"Voter index {i} has power index {powerIndexes[i]:.3f}.")
+		print(f"Voter index {i} has power index {powerIndexes[i]} = {float(powerIndexes[i]):.3f}.")
