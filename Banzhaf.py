@@ -1,3 +1,5 @@
+import fractions
+
 import builtins
 from typing import List
 
@@ -44,7 +46,7 @@ def findVetoPowers(winningCoalitions: List[List]):
 	return vetoPowers
 
 
-def findPowerDistribution(winningCoalitions: List[List]):
+def findPowerDistribution(winningCoalitions: List[List]) -> List[fractions.Fraction]:
 	voters = findAllVoters(winningCoalitions)
 
 	groupedCoalitions = dict()
@@ -73,9 +75,9 @@ def findPowerDistribution(winningCoalitions: List[List]):
 					voterPowers[memberToLeave] += 1
 
 	totalPower = builtins.sum(voterPowers)
-	powerIndexes = [0] * len(voters)
+	powerIndexes = [None] * len(voters)
 	for i in range(len(voters)):
-		powerIndexes[i] = voterPowers[i] / float(totalPower)
+		powerIndexes[i] = fractions.Fraction(voterPowers[i], totalPower)
 	return powerIndexes
 
 
@@ -95,4 +97,4 @@ if __name__ == '__main__':
 	powerIndexes = findPowerDistribution(winningCoalitions)
 	print("powerIndexes:")
 	for i in range(len(powerIndexes)):
-		print(f"Voter index {i} has power index {powerIndexes[i]:.3f}.")
+		print(f"Voter index {i} has power index {powerIndexes[i]} = {float(powerIndexes[i]):.3f}.")
