@@ -44,27 +44,33 @@ def findVetoPowers(winningCoalitions: List[List]):
 	return vetoPowers
 
 
-def findPowerDistribution(quota, weights, winningCoalitions: List[List]):
-	sums = []
-	for c in winningCoalitions:
-		sum = 0
-		[sum := sum + weights[voter] for voter in c]
-		sums.append(sum)
-
+def findPowerDistribution(winningCoalitions: List[List]):
 	voters = findAllVoters(winningCoalitions)
 
-	voterPowers = []
-	for voter in voters:
-		count = 0
-		for i in range(len(winningCoalitions)):
-			# check if voter can change this coalition from winning to losing
-			c = winningCoalitions[i]
-			if voter in c:
-				newVotes = sums[i] - weights[voter]
-				if newVotes < quota:
-					# this voter has power to make this coalition lose.
-					count += 1
-		voterPowers.append(count)
+	groupedCoalitions = dict()
+	for l in range(1, len(voters) + 1):
+		group = {tuple(wc) for wc in winningCoalitions if len(wc) == l}
+		groupedCoalitions[l] = group
+
+	voterPowers = [0] * len(voters)
+
+	for l in range(1, len(voters) + 1):
+		group = groupedCoalitions[l]
+		for coalition in group:
+			for i in range(len(coalition)):
+				memberToLeave = coalition[i]
+
+				newCoalition = list(coalition)
+				del newCoalition[i]
+				newCoalition = tuple(newCoalition)
+
+				# Check whether new coalition is still winning
+				newLength = l - 1
+				if newLength in groupedCoalitions and newCoalition in groupedCoalitions[newLength]:
+					# yes, it's still winning
+					pass
+				else:
+					voterPowers[memberToLeave] += 1
 
 	totalPower = builtins.sum(voterPowers)
 	powerIndexes = [0] * len(voters)
@@ -86,7 +92,7 @@ if __name__ == '__main__':
 	else:
 		print("vetoPowers:", vetoPowers)
 
-	powerIndexes = findPowerDistribution(quota, weights, winningCoalitions)
+	powerIndexes = findPowerDistribution(winningCoalitions)
 	print("powerIndexes:")
 	for i in range(len(powerIndexes)):
 		print(f"Voter index {i} has power index {powerIndexes[i]:.3f}.")
