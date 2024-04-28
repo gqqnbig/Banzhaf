@@ -11,10 +11,10 @@ import Banzhaf
 def findWinningCoalitionsConditions(weights):
 	greaterThans = set()
 	for length in range(1, len(weights) + 1):
-		for coalition in itertools.combinations(weights, length):
-			quota = sum(coalition)
-			greaterThans.add(quota)
-			print("Possible coalition {0} if q >= {1}w_2".format(coalition, quota))
+		for castWeights in itertools.combinations(weights, length):
+			s = sum(castWeights)
+			greaterThans.add(s)
+			print("Possible cast weights {0} if q >= {1}w_2".format(castWeights, s))
 	return greaterThans
 
 
